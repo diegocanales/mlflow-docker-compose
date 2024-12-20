@@ -13,7 +13,7 @@ services:
             - MINIO_ROOT_USER=${AWS_ACCESS_KEY_ID}
             - MINIO_ROOT_PASSWORD=${AWS_SECRET_ACCESS_KEY}
         volumes:
-            - minio_data:/data
+            - ./data/minio:/data
 
     mc:
         image: minio/mc@sha256:4ccb0c7437bda19ed232603eab10cc246c8f9ac7ccd282943ebb7657a2df4820
@@ -44,7 +44,7 @@ services:
             - MYSQL_PASSWORD=${MYSQL_PASSWORD}
             - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
         volumes:
-            - dbdata:/var/lib/mysql
+            - ./data/mysql:/var/lib/mysql
 
     web:
         restart: always
@@ -60,7 +60,14 @@ services:
             - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
             - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
             - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-        command: mlflow server --backend-store-uri mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE} --default-artifact-root s3://mlflow/ --host 0.0.0.0
+            - MLFLOW_TRACKING_USERNAME=${BASIC_AUTH_USERNAME}
+            - MLFLOW_TRACKING_PASSWORD=${BASIC_AUTH_PASSWORD}
+        command: >
+            mlflow server 
+            --backend-store-uri mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}
+            --default-artifact-root s3://mlflow/
+            --host 0.0.0.0
+            --app-name basic-auth
 
 volumes:
     dbdata:

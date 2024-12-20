@@ -13,15 +13,21 @@ MinIO S3 is used as the artifact store and MySQL server is used as the backend s
 
 2. `cd` into the `mlflow-docker-compose` directory
 
-3. Build and run the containers with `docker-compose`
+3. Create `.env` file from template and adjust the values if needed
+
+    ```bash
+    cp .env.template .env
+    ```
+
+4. Build and run the containers with `docker-compose`
 
     ```bash
     docker compose up -d --build
     ```
 
-4. Access MLflow UI with http://localhost:5000
+5. Access MLflow UI with http://localhost:5000
 
-5. Access MinIO UI with http://localhost:9000
+6. Access MinIO UI with http://localhost:9000
 
 ## Containerization
 
@@ -73,3 +79,19 @@ The MLflow tracking server is composed of 3 docker containers:
     ```bash
     curl -X POST -H "Content-Type:application/json" --data '{"dataframe_split":{"columns":["fixed acidity", "volatile acidity", "citric acid", "residual sugar", "chlorides", "free sulfur dioxide", "total sulfur dioxide", "density", "pH", "sulphates", "alcohol"],"data":[[6.2, 0.66, 0.48, 1.2, 0.029, 29, 75, 0.98, 3.33, 0.39, 12.8]]}}' http://127.0.0.1:1234/invocations
     ```
+
+## Authentication
+
+The MLflow server is protected with basic authentication. Default credentials are:
+- Username: admin
+- Password: password
+
+You can modify these credentials in the `.env` file by changing:
+- MLFLOW_TRACKING_USERNAME
+- MLFLOW_TRACKING_PASSWORD
+
+## Data Persistence
+
+All data is stored in the `./data` directory:
+- MinIO data: `./data/minio`
+- MySQL data: `./data/mysql`
