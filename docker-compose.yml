@@ -60,8 +60,8 @@ services:
             - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
             - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
             - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-            - MLFLOW_TRACKING_USERNAME=${BASIC_AUTH_USERNAME}
-            - MLFLOW_TRACKING_PASSWORD=${BASIC_AUTH_PASSWORD}
+            - MLFLOW_TRACKING_USERNAME=${MLFLOW_TRACKING_USERNAME}
+            - MLFLOW_TRACKING_PASSWORD=${MLFLOW_TRACKING_PASSWORD}
         command: >
             mlflow server 
             --backend-store-uri mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}
